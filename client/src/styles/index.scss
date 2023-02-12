@@ -1,0 +1,291 @@
+@import url("./normalize.scss");
+@import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap");
+
+$yellow: #f0f14e;
+$green: #6ded8a;
+$blue: #2b85f6;
+$pink: #ff3dff;
+$red: #ed3833;
+$white: #fae9c2;
+$black: #141516;
+
+* {
+  font-family: "VT323", monospace;
+  box-sizing: border-box;
+  color: $white;
+  background-color: $black;
+}
+
+::-webkit-scrollbar {
+  width: 2px;
+  background-color: $black;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: $white;
+  background-clip: padding-box;
+}
+
+body {
+  margin: 0;
+}
+
+button {
+  &:hover {
+    background-color: $yellow;
+    color: $red;
+    cursor: crosshair;
+  }
+
+  &.secondary {
+    &:hover {
+      color: $yellow;
+    }
+
+    font-size: small;
+    background-color: initial;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    color: $red;
+    width: auto;
+    border: 0;
+  }
+
+  height: 36px;
+  border: 2px solid $white;
+  background-color: $red;
+  color: $yellow;
+  width: 100%;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+button {
+  font-family: "Press Start 2P";
+}
+
+h1,
+h4 {
+  color: $yellow;
+}
+
+h2 {
+  color: $pink;
+}
+
+h3 {
+  color: $green;
+}
+
+input {
+  font-size: large;
+}
+
+video {
+  width: 100%;
+  border: 2px solid $pink;
+}
+
+form {
+  display: grid;
+  width: 100%;
+  row-gap: 4px;
+  grid-template-columns: auto min-content;
+  grid-template-areas:
+    "label label"
+    "input primaryButton"
+    "secondaryButton secondaryButton";
+
+  label {
+    grid-area: label;
+  }
+
+  input {
+    grid-area: input;
+    border: 2px solid $white;
+    text-overflow: ellipsis;
+    border-radius: 0;
+    padding: 0 6px;
+    min-height: max-content;
+    background-color: $white;
+    color: $black;
+  }
+
+  button {
+    &.primary {
+      grid-area: primaryButton;
+    }
+
+    &.secondary {
+      grid-area: secondaryButton;
+      margin-top: 4px;
+    }
+
+    margin: auto;
+  }
+}
+
+footer {
+  p {
+    color: $red;
+    font-size: small;
+  }
+}
+
+/*
+ * Layout
+ */
+
+main {
+  margin: auto;
+  max-width: 1024px;
+  min-height: 100vh;
+  display: grid;
+  grid-template-rows: min-content min-content auto min-content;
+  column-gap: 1rem;
+  grid-template-areas:
+    ". header ."
+    ". article ."
+    ". aside ."
+    ". footer .";
+
+  header {
+    grid-area: header;
+  }
+
+  aside {
+    grid-area: aside;
+    display: grid;
+    grid-template-rows: auto min-content;
+    row-gap: 8px;
+    overflow: hidden;
+  }
+
+  article {
+    grid-area: article;
+
+    p {
+      // display: -webkit-box;
+      // -webkit-line-clamp: 3;
+      // -webkit-box-orient: vertical;
+      // overflow: hidden;
+      margin: 0;
+    }
+  }
+
+  footer {
+    grid-area: footer;
+
+    p {
+      text-align: center;
+    }
+  }
+}
+
+/*
+ * Chatroom
+ */
+
+.chatroom {
+  display: grid;
+  grid-template-rows: min-content auto min-content;
+
+  .messages {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    padding-right: 8px;
+    height: 220px;
+
+    .timestamp {
+      font-size: x-small;
+      font-style: italic;
+    }
+
+    .autor {
+      font-size: small;
+      font-style: italic;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .message {
+      &.others {
+        color: $blue;
+      }
+
+      &.system {
+        color: $yellow;
+        font-size: small;
+        text-transform: uppercase;
+      }
+
+      &.me {
+        color: $pink;
+      }
+    }
+
+    p {
+      margin: 0;
+    }
+
+    span {
+      margin: 8px 0;
+      display: block;
+    }
+  }
+}
+
+@media (min-width: 667px) {
+  main {
+    grid-template-rows: min-content auto min-content;
+    grid-template-columns: 0 auto 33% 0;
+    grid-template-areas:
+      ". header header ."
+      ". article aside ."
+      ". footer footer .";
+  }
+
+  .chatroom {
+    .messages {
+      height: 80vh;
+    }
+  }
+}
+
+.sign-out {
+  display: grid;
+}
+
+/*
+ * Common
+ */
+
+.alert {
+  &.success {
+    border: 2px solid $green;
+  }
+
+  &.error {
+    border: 2px solid $red;
+  }
+
+  color: $yellow;
+  border: 2px solid $white;
+  padding: 4px 8px;
+  width: fit-content;
+}
+
+.center {
+  text-align: center;
+}
+
+.left {
+  text-align: left;
+}
+
+.right {
+  text-align: right;
+}
