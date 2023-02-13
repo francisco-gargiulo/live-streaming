@@ -1,53 +1,52 @@
+const http = require("http");
 const cors = require("cors");
-const fs = require("fs");
 
-const router = require("router")();
+const bodyParser = require("./utils/bodyParser");
+const streamControllers = require("./controllers/stream");
 
-router.use(cors());
+const router = (req, res) => {
+  const { pathname } = new URL(req.url);
 
-router
-  .route("/stream/:filename")
-  .get(function (request, response) {
-    const { filename } = request.params;
+  const [path, filename] = pathname.split("/");
 
-    try {
-      const file = fs.readFileSync(`${__dirname}/files/${filename}`);
-
-      response.end(file);
-    } catch (error) {
-      response.statusCode = 404;
-      response.end();
-    }
+  if (!["GET", "PUT"].includes(req.method)) {
+    res.statusCode = 405;
+    res.end();
 
     return;
-  })
-  .put(function (request, response) {
-    const { filename } = request.params;
+  }
 
-    let body = [];
-    return request
-      .on("data", function (chunk) {
-        body.push(chunk);
-      })
-      .on("end", function () {
-        body = Buffer.concat(body);
+  if (req.method === "PUT") {
+    try {
+      req.body = bodyParser(req);
+    } catch (error) {
+      res.statusCode = 400;
+      res.end();
 
-        try {
-          fs.writeFileSync(`${__dirname}/files/${filename}`, body);
+      return;
+    }
+  }
 
-          response.end(body);
-        } catch (error) {
-          console.log(error);
+  if (path !== "stream") {
+    res.statusCode = 404;
+    res.end();
 
-          response.statusCode = 400;
-          response.end();
-        }
-      });
-  });
+    return;
+  }
 
-module.exports = require("http").createServer(function (request, response) {
-  router(request, response, function () {
-    response.statusCode = 404;
-    response.end();
+  req.params = {
+    filename,
+  };
+
+  streamControllers[req.method](req, res);
+};
+
+const server = http.createServer((req, res) => {
+  cors()(req, res, () => {
+    console.log(`${req.method} ${req.url}`);
+
+    router(req, res);
   });
 });
+
+server.listen(3002);

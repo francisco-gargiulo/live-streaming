@@ -1,9 +1,9 @@
 const { Server } = require("socket.io");
-const jose = require("jose");
+const jwt = require("jsonwebtoken");
 
-const JWKS = jose.createRemoteJWKSet(
-  new URL("https://poprockandcorn.us.auth0.com/.well-known/jwks.json")
-);
+const validateAndSanitizeMessage = require("./services/validateAndSanitizeMessage");
+
+const SECRET = "s3cr3t";
 
 const io = new Server({
   cors: {
@@ -11,29 +11,7 @@ const io = new Server({
   },
 });
 
-const messages = [
-  {
-    type: "user",
-    timestamp: Date.now(),
-    message: "Hi",
-    email: "foo@bar.com",
-    nickname: "Foo",
-  },
-  {
-    type: "user",
-    timestamp: Date.now(),
-    message: "Hello",
-    email: "john@doe.com",
-    nickname: "John",
-  },
-  {
-    type: "user",
-    timestamp: Date.now(),
-    message: "Hello motherfuckers!",
-    email: "francisco_gargiulo@hotmail.com",
-    nickname: "Fran",
-  }
-];
+const messages = [];
 
 io.on("connection", async (socket) => {
   socket.emit("load", messages);
@@ -44,23 +22,24 @@ io.on("connection", async (socket) => {
     }
 
     try {
-      const { payload } = await jose.jwtVerify(
+      const sanitizedMessage = validateAndSanitizeMessage(message);
+
+      const { email, nickname } = jwt.verify(
         socket.handshake.auth.id_token,
-        JWKS
+        SECRET
       );
 
       messages.push({
         type: "user",
         timestamp: Date.now(),
-        message,
-        email: payload.email,
-        nickname: payload.nickname,
+        message: sanitizedMessage,
+        email,
+        nickname,
       });
 
       socket.broadcast.emit("load", messages);
     } catch ({ code }) {
-      console.error(code);
-      socket.emit(code);
+      socket.emit("error", { code });
     }
   });
 });
@@ -69,4 +48,4 @@ io.on("authenticated", () => {
   console.log("authenticated");
 });
 
-module.exports = io;
+io.listen(3001);
