@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 
 export default function SignIn({ onSignIn }) {
-  const [email, setEmail] = useState("francisco_gargiulo@hotmail.com");
+  const [username, setUsername] = useState("francisco_gargiulo@hotmail.com");
   const [password, setPassword] = useState("");
+  const [nickname, setNickname] = useState("Francisco");
   const [error, setError] = useState();
   const [step, setStep] = useState(1);
 
@@ -34,19 +35,21 @@ export default function SignIn({ onSignIn }) {
     nextStep();
   };
 
-  const onSubmitEmail = async (e) => {
+  const onSubmitUsername = async (e) => {
     e.preventDefault();
 
     try {
-      await fetch("http://192.168.1.90:3002/auth/start", {
+      await fetch("http://localhost:3001/auth/start", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         mode: "cors",
         body: JSON.stringify({
-          email,
+          username,
+          nickname,
         }),
+        credentials: "include",
       });
 
       nextStep();
@@ -59,16 +62,16 @@ export default function SignIn({ onSignIn }) {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://192.168.1.90:3002/auth/verify", {
+      const response = await fetch("http://localhost:3001/auth/verify", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        mode: "cors",
         body: JSON.stringify({
-          email,
+          username,
           password,
         }),
+        credentials: "include",
       });
 
       if (!response.ok) {
@@ -105,21 +108,21 @@ export default function SignIn({ onSignIn }) {
               {error}
             </p>
           ) : null}
-          <form onSubmit={onSubmitEmail}>
-            <label htmlFor="input-email">Email:</label>
+          <form onSubmit={onSubmitUsername}>
+            <label htmlFor="input-username">Username:</label>
             <input
-              value={email}
+              value={username}
               autoComplete="off"
               type="email"
-              id="input-email"
+              id="input-username"
               required
               maxLength={64}
               onChange={(e) => {
-                setEmail(e.target.value);
+                setUsername(e.target.value);
               }}
             />
             <button type="submit" className="primary">
-              Start
+              Submit
             </button>
             <button onClick={onClickPreviousStepButton} className="secondary">
               Exit
@@ -145,7 +148,7 @@ export default function SignIn({ onSignIn }) {
               pattern="\d*"
               maxLength={6}
               required
-              inputmode="numeric"
+              inputMode="numeric"
               onChange={(e) => {
                 setPassword(e.target.value);
               }}

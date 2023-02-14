@@ -1,9 +1,12 @@
 const { Server } = require("socket.io");
 const jwt = require("jsonwebtoken");
+const dotenv = require("dotenv");
+
+dotenv.config();
 
 const validateAndSanitizeMessage = require("./services/validateAndSanitizeMessage");
 
-const SECRET = "s3cr3t";
+const { JWT_SECRET } = process.env;
 
 const io = new Server({
   cors: {
@@ -11,7 +14,15 @@ const io = new Server({
   },
 });
 
-const messages = [];
+const messages = [
+  {
+    type: "user",
+    timestamp: Date.now(),
+    message: "test",
+    email: "john@doe.com",
+    nickname: "John",
+  },
+];
 
 io.on("connection", async (socket) => {
   socket.emit("load", messages);
@@ -26,7 +37,7 @@ io.on("connection", async (socket) => {
 
       const { email, nickname } = jwt.verify(
         socket.handshake.auth.id_token,
-        SECRET
+        JWT_SECRET
       );
 
       messages.push({
@@ -48,4 +59,4 @@ io.on("authenticated", () => {
   console.log("authenticated");
 });
 
-io.listen(3001);
+io.listen(3002);

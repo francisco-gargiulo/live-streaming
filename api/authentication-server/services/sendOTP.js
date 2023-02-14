@@ -10,10 +10,7 @@ const renderEmail = (otp) => {
   return emailTemplate.replace("{{otp}}", otp);
 };
 
-const SMTP_USERNAME = "";
-const SMTP_PASSWORD = "";
-const SMTP_HOST = "smtp-mail.outlook.com";
-const SMTP_PORT = 587;
+const { SMTP_USERNAME, SMTP_PASSWORD, SMTP_HOST, SMTP_PORT } = process.env;
 
 module.exports = async function sendOTP(email, otp) {
   const transporter = nodemailer.createTransport({
@@ -27,7 +24,7 @@ module.exports = async function sendOTP(email, otp) {
   });
 
   const mailOptions = {
-    from: "",
+    from: SMTP_USERNAME,
     to: email,
     subject: "Your one-time password",
     html: renderEmail(otp),

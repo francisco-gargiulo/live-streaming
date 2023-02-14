@@ -2,24 +2,25 @@ const issueToken = require("../services/issueToken");
 
 module.exports = function (req, res) {
   const { username, password } = req.body;
+  const { user } = req.session;
 
   if (!password) {
     return res.status(400).send("Password is required");
   }
 
-  if (!req.session.user) {
+  if (!user) {
     return res.sendStatus(401);
   }
 
-  if (req.session.user.email !== username) {
+  if (user.username !== username) {
     return res.sendStatus(401);
   }
 
-  if (req.session.user.password !== password) {
+  if (user.password !== password) {
     return res.sendStatus(401);
   }
 
-  const token = issueToken(req.session.user);
+  const token = issueToken(user);
 
   res.json(token);
 };

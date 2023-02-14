@@ -16,17 +16,13 @@ export default function Chat({ token }) {
   const [socket, setSocket] = useState({});
 
   useEffect(() => {
-    const socket = io("http://192.168.1.90:3003", {
+    const socket = io("http://localhost:3002", {
       auth: token,
       forceNew: true,
     });
 
     socket.on("load", (data) => {
       setMessages(data);
-    });
-
-    socket.on("ERR_JWS_INVALID", () => {
-      setUser();
     });
 
     socket.on("ERR_JWT_EXPIRED", () => {

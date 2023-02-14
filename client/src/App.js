@@ -38,7 +38,7 @@ function App() {
         )}
       </aside>
       <footer>
-        <p>2022 © All rights reserved</p>
+        <p>2022</p>
       </footer>
     </main>
   );

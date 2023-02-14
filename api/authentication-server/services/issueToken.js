@@ -1,11 +1,14 @@
 const crypto = require("crypto");
 const jwt = require("jsonwebtoken");
 
-const SECRET = "s3cr3t";
+const { JWT_SECRET } = process.env;
 
-module.exports = function issueToken({ nickname, email }) {
+module.exports = function issueToken({ nickname, username }) {
   const expiresIn = 3600;
-  const sub = crypto.createHmac("sha256", SECRET).update(email).digest("hex");
+  const sub = crypto
+    .createHmac("sha256", JWT_SECRET)
+    .update(username)
+    .digest("hex");
 
   const iat = Date.now();
   const exp = iat + expiresIn;
@@ -17,12 +20,12 @@ module.exports = function issueToken({ nickname, email }) {
     id_token: jwt.sign(
       {
         sub,
-        email,
+        email: username,
         nickname,
         exp,
         iat,
       },
-      SECRET
+      JWT_SECRET
     ),
   };
 };
