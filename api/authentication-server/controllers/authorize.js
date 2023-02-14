@@ -1,6 +1,6 @@
 const sendOTP = require("../services/sendOTP");
 
-module.exports = async function startController(req, res) {
+module.exports = async function (req, res) {
   const email = req.body.email;
   const nickname = req.body.nickname;
 

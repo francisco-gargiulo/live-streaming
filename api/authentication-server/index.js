@@ -15,7 +15,7 @@ app.use(
   })
 );
 
-app.post("/start", require("./controllers/start"));
+app.post("/authorize", require("./controllers/authorize"));
 app.post("/token", require("./controllers/token"));
 
 app.listen(3000);

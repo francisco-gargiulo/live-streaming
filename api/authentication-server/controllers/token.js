@@ -1,11 +1,7 @@
 const issueToken = require("../services/issueToken");
 
-module.exports = function tokenController(req, res) {
-  const { grant_type, username, password } = req.body;
-
-  if (grant_type !== "password") {
-    return res.status(400).send("Invalid grant_type");
-  }
+module.exports = function (req, res) {
+  const { username, password } = req.body;
 
   if (!password) {
     return res.status(400).send("Password is required");
