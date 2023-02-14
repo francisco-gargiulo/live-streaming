@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const fs = require("fs");
 
-const authenticate = require("./middlewares/authenticate");
+const authenticate = require("./middlewares/basic-auth");
 
 const app = express();
 
