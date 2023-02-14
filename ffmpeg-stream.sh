@@ -10,4 +10,4 @@ ffmpeg -y -hide_banner \
     -c:a aac -b:a 128k \
     -f hls \
     -master_pl_name master.m3u8 \
-    -method PUT http://localhost:3001/static/master.m3u8
+    -method PUT http://localhost:3003/static/master.m3u8
