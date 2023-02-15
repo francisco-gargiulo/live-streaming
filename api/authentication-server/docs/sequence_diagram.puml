@@ -1,0 +1,24 @@
+@startuml
+actor User
+participant "Login Page" as LP
+participant "Authentication System" as AS
+participant "Email System" as ES
+participant "Account Dashboard" as AD
+
+User -> LP: Navigate to login page
+LP -> User: Display login page
+User -> LP: Click "login with email"
+LP -> User: Prompt for email address
+User -> LP: Enter email address
+LP -> AS: Generate OTP
+AS -> ES: Send OTP to email address
+ES -> AS: Return email delivery status
+AS -> User: Prompt for OTP
+User -> LP: Enter OTP
+LP -> AS: Validate OTP
+AS -> LP: Return authentication result
+LP -> User: Display login success message
+User -> LP: Click "continue to dashboard"
+LP -> AD: Redirect to account dashboard
+AD -> User: Display account dashboard
+@enduml
