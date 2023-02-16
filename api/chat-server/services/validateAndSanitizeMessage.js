@@ -1,19 +1,19 @@
 module.exports = function validateAndSanitizeMessage(message) {
+  const maxLength = 100;
+
   // Trim the message to remove leading and trailing spaces
-  let sanitizedMessage = message.trim();
+  const trimmedMessage = message.trim();
 
   // Check if the message is too short or too long
-  if (sanitizedMessage.length < 1 || sanitizedMessage.length > 100) {
-    const error = new Error("Invalid message length");
-
-    error.code = "INVALID_LENGTH";
-
-    throw error;
+  if (trimmedMessage.length < 1 || trimmedMessage.length > maxLength) {
+    throw new Error("Invalid message length")
+      .setCode("INVALID_LENGTH");
   }
 
   // Sanitize the message to remove any HTML or script tags
-  sanitizedMessage = sanitizedMessage.replace(/<script.*?>.*?<\/script>/gi, "");
-  sanitizedMessage = sanitizedMessage.replace(/<\/?[^>]+(>|$)/g, "");
+  const sanitizedMessage = trimmedMessage
+    .replace(/<script.*?>.*?<\/script>/gi, "")
+    .replace(/<\/?[^>]+(>|$)/g, "");
 
   return sanitizedMessage;
 };

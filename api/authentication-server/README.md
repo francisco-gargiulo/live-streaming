@@ -12,7 +12,7 @@ To get started with this project, you'll need to follow these steps:
 1. Install the dependencies using `npm install`
 2. Create a .env file with the following variables:
 
-```
+```env
 SMTP_USERNAME=your-user
 SMTP_PASSWORD=your-password
 SMTP_HOST=host

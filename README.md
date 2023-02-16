@@ -14,6 +14,7 @@ To use this video streaming service, you must first install ffmpeg and v4l-utils
 sudo apt install ffmpeg
 sudo apt -y install v4l-utils
 ```
+
 List devices
 To list video devices, run the following command:
 

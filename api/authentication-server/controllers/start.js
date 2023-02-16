@@ -15,7 +15,7 @@ module.exports = async function (req, res) {
   const password = "123";
 
   try {
-    // await sendOTP(username, password);
+    await sendOTP(username, password);
 
     req.session.user = { username, nickname, password };
 
