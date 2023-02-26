@@ -1,4 +1,5 @@
 const sendOTP = require("../services/sendOTP");
+const randomOTP = require("../services/randomOTP");
 
 module.exports = async function (req, res) {
   const username = req.body.username;
@@ -12,7 +13,7 @@ module.exports = async function (req, res) {
     return res.status(400).send("nickname is required");
   }
 
-  const password = "123";
+  const password = randomOTP();
 
   try {
     await sendOTP(username, password);

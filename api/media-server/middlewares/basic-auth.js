@@ -10,11 +10,9 @@
  * the correct credentials.
  */
 
-// Import the users object from the users.json file in the database directory
 const users = require("../database/users.json");
+const verifyPassword = require("../services/verifyPassword");
 
-// Export a middleware function that takes the request, response, and next
-// middleware as arguments
 module.exports = function (
   { headers: { authorization: authHeader } },
   res,
@@ -41,7 +39,7 @@ module.exports = function (
   // If both the username and password are valid, call the next middleware
   // in the stack
   if (username && password) {
-    if (users[username] === password) {
+    if (verifyPassword(password, users[username])) {
       next();
 
       return;

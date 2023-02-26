@@ -25,13 +25,19 @@ module.exports = function (req, res) {
 
     if (req.session.retry > 3) {
       req.session.destroy();
-      return res.status(403).send("Maximum retries exceeded, please send a new OTP");
+      return res
+        .status(403)
+        .send("Maximum retries exceeded, please send a new OTP");
     }
 
-    return res.status(400).send(`Incorrect OTP, retry ${req.session.retry} of 3`);
+    return res
+      .status(400)
+      .send(`Incorrect OTP, retry ${req.session.retry} of 3`);
   }
 
   const token = issueToken(user);
+
+  req.session.destroy();
 
   res.json(token);
 };
